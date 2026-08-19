@@ -3,7 +3,7 @@ class Api::V1::RecipesController < Api::V1::BaseController
 
   def index
     scope = current_user.recipes
-    scope = scope.where("name ILIKE ?", "%#{params[:q].strip}%") if params[:q].present?
+    scope = apply_search(scope) if params[:q].present?
     page = [ params[:page].to_i, 1 ].max
     per_page = (params[:per_page] || 20).to_i.clamp(1, 100)
     recipes = scope.order(:name).offset((page - 1) * per_page).limit(per_page)
@@ -40,6 +40,19 @@ class Api::V1::RecipesController < Api::V1::BaseController
   end
 
   private
+
+  def apply_search(scope)
+    q = params[:q].strip
+    escaped = q.gsub(/["\\^$.|?*+()\[\]{}]/) do |c|
+      case c
+      when '"' then '\\"'
+      when "\\" then "\\\\\\\\"
+      else "\\\\\\\\#{c}"
+      end
+    end
+    path = %Q{$[*].name ? (@ like_regex ".*#{escaped}.*" flag "i")}
+    scope.where("name ILIKE ? OR jsonb_path_exists(ingredients, ?)", "%#{q}%", path)
+  end
 
   def set_recipe
     @recipe = current_user.recipes.find(params[:id])
