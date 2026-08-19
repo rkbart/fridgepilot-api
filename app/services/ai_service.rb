@@ -72,10 +72,11 @@ class AiService
   end
 
   def build_grocery_prompt(recipe, pantry_items)
-    pantry_names = pantry_items.map { |i| i[:name] }.downcase
+    pantry_names = pantry_items.map { |i| i[:name].downcase }
+    ingredient_names = recipe[:ingredients].map { |i| i.is_a?(Hash) ? (i["name"] || i[:name]) : i }
     <<~PROMPT
       Recipe: #{recipe[:name]}
-      Ingredients: #{recipe[:ingredients].join(", ")}
+      Ingredients: #{ingredient_names.join(", ")}
       Already in pantry: #{pantry_names.join(", ")}
 
       List only the ingredients needed that are NOT in the pantry.
