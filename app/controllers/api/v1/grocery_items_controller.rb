@@ -1,6 +1,6 @@
 class Api::V1::GroceryItemsController < Api::V1::BaseController
   before_action :set_grocery_list
-  before_action :set_grocery_item, only: [:update, :destroy]
+  before_action :set_grocery_item, only: [ :update, :destroy ]
 
   def create
     item = @grocery_list.grocery_items.build(grocery_item_params)

@@ -1,5 +1,5 @@
 class Api::V1::GroceryListsController < Api::V1::BaseController
-  before_action :set_grocery_list, only: [:show, :update, :destroy]
+  before_action :set_grocery_list, only: [ :show, :update, :destroy ]
 
   def index
     lists = current_user.grocery_lists.includes(:grocery_items)
