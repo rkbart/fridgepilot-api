@@ -1,5 +1,5 @@
 class Api::V1::RecipesController < Api::V1::BaseController
-  before_action :set_recipe, only: [:show, :update, :destroy]
+  before_action :set_recipe, only: [ :show, :update, :destroy ]
 
   def index
     recipes = current_user.recipes
@@ -39,6 +39,6 @@ class Api::V1::RecipesController < Api::V1::BaseController
   end
 
   def recipe_params
-    params.require(:recipe).permit(:name, ingredients: [:name, :quantity, :unit], instructions: [])
+    params.require(:recipe).permit(:name, ingredients: [ :name, :quantity, :unit ], instructions: [])
   end
 end

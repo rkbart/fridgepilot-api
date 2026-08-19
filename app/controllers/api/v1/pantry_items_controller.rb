@@ -1,5 +1,5 @@
 class Api::V1::PantryItemsController < Api::V1::BaseController
-  before_action :set_pantry_item, only: [:show, :update, :destroy]
+  before_action :set_pantry_item, only: [ :show, :update, :destroy ]
 
   def index
     items = current_user.pantry_items

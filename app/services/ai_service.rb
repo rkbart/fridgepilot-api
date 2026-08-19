@@ -33,7 +33,7 @@ class AiService
     request["Content-Type"] = "application/json"
     request.body = {
       model: @model,
-      messages: [{ role: "user", content: prompt }],
+      messages: [ { role: "user", content: prompt } ],
       max_tokens: 1024,
       temperature: 0.7
     }.to_json
