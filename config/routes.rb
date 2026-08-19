@@ -5,6 +5,10 @@ Rails.application.routes.draw do
     sessions: "users/sessions"
   }
 
+  devise_scope :user do
+    post 'users/token/renew', to: 'users/tokens#renew'
+  end
+
   # API namespace
   namespace :api do
     namespace :v1 do
