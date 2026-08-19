@@ -64,6 +64,8 @@ Authorization: Bearer <token>
 
 Tokens expire after **1 hour**. Logging out revokes the token server-side (JTI strategy), so it cannot be reused. The frontend stores the token in `localStorage`.
 
+Sessions **slide**: before a token expires, the client can call `POST /users/token/renew` with the still-valid bearer token to receive a fresh 1-hour token in the `Authorization` response header. This prevents "Signature has expired" 401s during active use. Once a token has expired it cannot be renewed — the client must sign in again.
+
 ## API reference
 
 ### Authentication (Devise)
@@ -73,6 +75,7 @@ Tokens expire after **1 hour**. Logging out revokes the token server-side (JTI s
 | `POST` | `/users` | Sign up (JSON body: `{ "user": { email, password, password_confirmation, name? } }`) |
 | `POST` | `/users/sign_in` | Sign in → returns user + `Authorization: Bearer <token>` |
 | `DELETE` | `/users/sign_out` | Sign out / revoke current token |
+| `POST` | `/users/token/renew` | Renew a still-valid token → fresh `Authorization: Bearer <token>` |
 
 ### Current user
 
