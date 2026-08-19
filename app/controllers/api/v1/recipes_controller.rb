@@ -2,8 +2,15 @@ class Api::V1::RecipesController < Api::V1::BaseController
   before_action :set_recipe, only: [ :show, :update, :destroy ]
 
   def index
-    recipes = current_user.recipes
-    render json: recipes.map { |r| RecipeSerializer.new(r).serializable_hash }
+    scope = current_user.recipes
+    scope = scope.where("name ILIKE ?", "%#{params[:q].strip}%") if params[:q].present?
+    page = [ params[:page].to_i, 1 ].max
+    per_page = (params[:per_page] || 20).to_i.clamp(1, 100)
+    recipes = scope.order(:name).offset((page - 1) * per_page).limit(per_page)
+    render json: {
+      data: recipes.map { |r| RecipeSerializer.new(r).serializable_hash },
+      meta: { total: scope.count, page: page, per_page: per_page }
+    }
   end
 
   def show
