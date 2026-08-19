@@ -17,10 +17,10 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "rack-cors"
 
 # Environment variables
-gem "dotenv-rails", groups: [:development, :test]
+gem "dotenv-rails", groups: [ :development, :test ]
 
 # Authentication
-gem "devise", "~> 4.9"
+gem "devise", "~> 5.0"
 gem "devise-jwt", "~> 0.11"
 
 group :development, :test do
