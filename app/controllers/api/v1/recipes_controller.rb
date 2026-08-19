@@ -39,6 +39,6 @@ class Api::V1::RecipesController < Api::V1::BaseController
   end
 
   def recipe_params
-    params.require(:recipe).permit(:name, :instructions, ingredients: [])
+    params.require(:recipe).permit(:name, ingredients: [:name, :quantity, :unit], instructions: [])
   end
 end
