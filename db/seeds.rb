@@ -241,5 +241,108 @@ unless Rails.env.production?
     end
   end
 
-  puts "Seeded #{user.recipes.count} recipes for #{user.email}"
+  # Sample grocery lists to exercise pagination (frontend shows 10 per page).
+  grocery_sample_items = [
+    { name: "Milk", quantity: 1, unit: "gallon" },
+    { name: "Eggs", quantity: 1, unit: "dozen" },
+    { name: "Butter", quantity: 250, unit: "g" },
+    { name: "Bacon", quantity: 100, unit: "g" },
+    { name: "Spinach", quantity: 200, unit: "g" },
+    { name: "Chicken breast", quantity: 1, unit: "kg" },
+    { name: "Rice", quantity: 2, unit: "kg" },
+    { name: "Olive oil", quantity: 500, unit: "ml" },
+    { name: "Onions", quantity: 1, unit: "kg" },
+    { name: "Garlic", quantity: 1, unit: "bulb" }
+  ]
+
+  25.times do |i|
+    list = user.grocery_lists.find_or_create_by!(name: "Weekly Groceries #{format('%02d', i + 1)}") do |l|
+      l.source = i.even? ? "manual" : "ai_generated"
+    end
+    grocery_sample_items.each do |attrs|
+      list.grocery_items.find_or_create_by!(name: attrs[:name]) do |item|
+        item.quantity = attrs[:quantity]
+        item.unit = attrs[:unit]
+        item.status = i.even? && item.name == "Milk" ? "checked" : "pending"
+        item.source = list.source == "ai_generated" ? "ai_suggested" : "manual"
+      end
+    end
+  end
+
+  # Sample pantry items to exercise scaling (grouped across categories).
+  pantry_sample_items = [
+    ["Spaghetti", 500, "g", "Grains & Pasta"],
+    ["Penne", 400, "g", "Grains & Pasta"],
+    ["Rice", 2, "kg", "Grains & Pasta"],
+    ["Rolled oats", 1, "kg", "Grains & Pasta"],
+    ["Quinoa", 500, "g", "Grains & Pasta"],
+    ["Couscous", 500, "g", "Grains & Pasta"],
+    ["Flour", 1, "kg", "Grains & Pasta"],
+    ["Lentils", 500, "g", "Grains & Pasta"],
+    ["Canned tomatoes", 3, "cans", "Canned Goods"],
+    ["Chickpeas", 2, "cans", "Canned Goods"],
+    ["Tuna", 4, "cans", "Canned Goods"],
+    ["Coconut milk", 2, "cans", "Canned Goods"],
+    ["Sweet corn", 3, "cans", "Canned Goods"],
+    ["Baked beans", 2, "cans", "Canned Goods"],
+    ["Cumin", 50, "g", "Spices"],
+    ["Paprika", 40, "g", "Spices"],
+    ["Sea salt", 500, "g", "Spices"],
+    ["Black pepper", 80, "g", "Spices"],
+    ["Cinnamon", 30, "g", "Spices"],
+    ["Chili flakes", 60, "g", "Spices"],
+    ["Turmeric", 40, "g", "Spices"],
+    ["Oregano", 25, "g", "Spices"],
+    ["Olive oil", 750, "ml", "Oils & Condiments"],
+    ["Soy sauce", 300, "ml", "Oils & Condiments"],
+    ["Vinegar", 250, "ml", "Oils & Condiments"],
+    ["Mayonnaise", 400, "ml", "Oils & Condiments"],
+    ["Ketchup", 500, "ml", "Oils & Condiments"],
+    ["Mustard", 200, "ml", "Oils & Condiments"],
+    ["Almond flour", 1, "kg", "Baking"],
+    ["Baking powder", 100, "g", "Baking"],
+    ["Brown sugar", 1, "kg", "Baking"],
+    ["Cocoa powder", 250, "g", "Baking"],
+    ["Vanilla extract", 60, "ml", "Baking"],
+    ["Chocolate chips", 300, "g", "Baking"],
+    ["Milk", 1, "l", "Dairy & Eggs"],
+    ["Eggs", 12, "pcs", "Dairy & Eggs"],
+    ["Cheddar", 250, "g", "Dairy & Eggs"],
+    ["Yogurt", 500, "g", "Dairy & Eggs"],
+    ["Butter", 250, "g", "Dairy & Eggs"],
+    ["Heavy cream", 200, "ml", "Dairy & Eggs"],
+    ["Carrots", 1, "kg", "Produce"],
+    ["Potatoes", 2, "kg", "Produce"],
+    ["Onions", 1, "kg", "Produce"],
+    ["Garlic", 1, "bulb", "Produce"],
+    ["Spinach", 200, "g", "Produce"],
+    ["Tomatoes", 6, "pcs", "Produce"],
+    ["Lettuce", 1, "head", "Produce"],
+    ["Apples", 6, "pcs", "Produce"],
+    ["Chicken breast", 1, "kg", "Meat & Seafood"],
+    ["Ground beef", 500, "g", "Meat & Seafood"],
+    ["Salmon fillet", 400, "g", "Meat & Seafood"],
+    ["Bacon", 200, "g", "Meat & Seafood"],
+    ["Sausages", 6, "pcs", "Meat & Seafood"],
+    ["Frozen peas", 500, "g", "Frozen"],
+    ["Frozen berries", 400, "g", "Frozen"],
+    ["Ice cream", 1, "l", "Frozen"],
+    ["Frozen pizza", 2, "pcs", "Frozen"],
+    ["Orange juice", 1, "l", "Beverages"],
+    ["Green tea", 20, "bags", "Beverages"],
+    ["Coffee beans", 250, "g", "Beverages"],
+    ["Chips", 150, "g", "Snacks"],
+    ["Crackers", 200, "g", "Snacks"],
+    ["Granola bars", 6, "pcs", "Snacks"]
+  ]
+
+  pantry_sample_items.each do |name, quantity, unit, category|
+    user.pantry_items.find_or_create_by!(name: name) do |item|
+      item.quantity = quantity
+      item.unit = unit
+      item.category = category
+    end
+  end
+
+  puts "Seeded #{user.recipes.count} recipes, #{user.grocery_lists.count} grocery lists, and #{user.pantry_items.count} pantry items for #{user.email}"
 end
