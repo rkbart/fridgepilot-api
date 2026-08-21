@@ -17,7 +17,7 @@ class Api::V1::DiscoverController < Api::V1::BaseController
     matcher = RecipeMatcher.new(ingredients)
     ranked = full_recipes
       .map { |recipe| matcher.match(recipe) }
-      .sort_by { |r| [-r[:match_pct], -r[:available_count]] }
+      .sort_by { |r| [ -r[:match_pct], -r[:available_count] ] }
       .first(MAX_RESULTS)
 
     render json: {

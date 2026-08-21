@@ -8,7 +8,7 @@ RSpec.describe Api::V1::DiscoverController, type: :request do
   describe 'POST /api/v1/discover' do
     context 'when not authenticated' do
       it 'returns unauthorized' do
-        post '/api/v1/discover', params: { ingredients: ["chicken"] }.to_json,
+        post '/api/v1/discover', params: { ingredients: [ "chicken" ] }.to_json,
              headers: { "Content-Type" => "application/json" }
 
         expect(response).to have_http_status(:unauthorized)
@@ -44,7 +44,7 @@ RSpec.describe Api::V1::DiscoverController, type: :request do
           ]
         })
 
-        post '/api/v1/discover', params: { ingredients: ["chicken"] }.to_json, headers: headers
+        post '/api/v1/discover', params: { ingredients: [ "chicken" ] }.to_json, headers: headers
 
         expect(response).to have_http_status(:success)
         json = JSON.parse(response.body)
@@ -64,7 +64,7 @@ RSpec.describe Api::V1::DiscoverController, type: :request do
         allow(client_mock).to receive(:search_by_ingredient)
           .and_raise(TheMealDbClient::ApiError, "Service unavailable")
 
-        post '/api/v1/discover', params: { ingredients: ["chicken"] }.to_json, headers: headers
+        post '/api/v1/discover', params: { ingredients: [ "chicken" ] }.to_json, headers: headers
 
         expect(response).to have_http_status(:bad_gateway)
         json = JSON.parse(response.body)

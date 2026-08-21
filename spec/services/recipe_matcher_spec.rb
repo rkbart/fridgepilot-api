@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe RecipeMatcher do
   describe '#match' do
     it 'normalizes ingredient names for matching' do
-      matcher = described_class.new(["Chicken", "garlic", " Soy Sauce "])
+      matcher = described_class.new([ "Chicken", "garlic", " Soy Sauce " ])
 
       recipe = {
         id: "1",
@@ -26,7 +26,7 @@ RSpec.describe RecipeMatcher do
     end
 
     it 'handles parenthetical info in ingredient names' do
-      matcher = described_class.new(["chicken breast"])
+      matcher = described_class.new([ "chicken breast" ])
 
       recipe = {
         id: "1",
@@ -44,7 +44,7 @@ RSpec.describe RecipeMatcher do
     end
 
     it 'calculates 0% match when no ingredients available' do
-      matcher = described_class.new(["tofu"])
+      matcher = described_class.new([ "tofu" ])
 
       recipe = {
         id: "1",
@@ -63,7 +63,7 @@ RSpec.describe RecipeMatcher do
     end
 
     it 'calculates 100% match' do
-      matcher = described_class.new(["chicken", "garlic", "onion"])
+      matcher = described_class.new([ "chicken", "garlic", "onion" ])
 
       recipe = {
         id: "1",
@@ -83,7 +83,7 @@ RSpec.describe RecipeMatcher do
     end
 
     it 'handles empty recipe ingredients' do
-      matcher = described_class.new(["chicken"])
+      matcher = described_class.new([ "chicken" ])
 
       recipe = {
         id: "1",
@@ -98,7 +98,7 @@ RSpec.describe RecipeMatcher do
     end
 
     it 'handles nil pantry ingredients gracefully' do
-      matcher = described_class.new([nil, "", "chicken"])
+      matcher = described_class.new([ nil, "", "chicken" ])
 
       recipe = {
         id: "1",
@@ -114,7 +114,7 @@ RSpec.describe RecipeMatcher do
     end
 
     it 'preserves recipe metadata' do
-      matcher = described_class.new(["chicken"])
+      matcher = described_class.new([ "chicken" ])
 
       recipe = {
         id: "52772",
@@ -124,7 +124,7 @@ RSpec.describe RecipeMatcher do
         area: "Japanese",
         instructions: "Cook it.",
         youtube_url: "https://youtube.com/watch?v=123",
-        tags: ["Meat", "Dinner"],
+        tags: [ "Meat", "Dinner" ],
         ingredients: [
           { name: "chicken", measure: "1 kg" }
         ]
@@ -138,11 +138,11 @@ RSpec.describe RecipeMatcher do
       expect(result[:category]).to eq("Chicken")
       expect(result[:area]).to eq("Japanese")
       expect(result[:instructions]).to eq("Cook it.")
-      expect(result[:tags]).to eq(["Meat", "Dinner"])
+      expect(result[:tags]).to eq([ "Meat", "Dinner" ])
     end
 
     it 'includes measure info in ingredient match results' do
-      matcher = described_class.new(["chicken"])
+      matcher = described_class.new([ "chicken" ])
 
       recipe = {
         id: "1",

@@ -89,7 +89,7 @@ RSpec.describe TheMealDbClient do
       expect(recipe[:ingredients].length).to eq(2)
       expect(recipe[:ingredients][0][:name]).to eq("soy sauce")
       expect(recipe[:ingredients][0][:measure]).to eq("3/4 cup")
-      expect(recipe[:tags]).to eq(["Meat", "Casserole"])
+      expect(recipe[:tags]).to eq([ "Meat", "Casserole" ])
     end
 
     it 'returns nil when no meals found' do

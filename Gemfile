@@ -37,12 +37,12 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 end
 
-gem "rspec-rails", "~> 8.0", groups: [:development, :test]
+gem "rspec-rails", "~> 8.0", groups: [ :development, :test ]
 
-gem "factory_bot_rails", "~> 6.5", groups: [:development, :test]
+gem "factory_bot_rails", "~> 6.5", groups: [ :development, :test ]
 
 gem "shoulda-matchers", "~> 8.0", group: :test
 
-gem "faker", "~> 3.8", groups: [:development, :test]
+gem "faker", "~> 3.8", groups: [ :development, :test ]
 
 gem "database_cleaner-active_record", "~> 2.2", group: :test

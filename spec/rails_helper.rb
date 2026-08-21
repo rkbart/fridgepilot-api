@@ -1,5 +1,6 @@
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
+ENV['DEVISE_JWT_SECRET_KEY'] ||= 'test-secret-key-for-ci'
 require_relative '../config/environment'
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
@@ -13,7 +14,7 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 
 RSpec.configure do |config|
-  config.fixture_paths = [Rails.root.join('spec/fixtures')]
+  config.fixture_paths = [ Rails.root.join('spec/fixtures') ]
   config.use_transactional_fixtures = true
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
