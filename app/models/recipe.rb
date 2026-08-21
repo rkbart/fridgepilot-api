@@ -1,6 +1,7 @@
 class Recipe < ApplicationRecord
   belongs_to :user
   has_many :grocery_items, dependent: :destroy
+  has_one_attached :image
 
   validates :name, presence: true
   validate :ingredients_must_be_valid
