@@ -30,6 +30,8 @@ class Api::V1::RecipesController < Api::V1::BaseController
   def update
     if params[:recipe][:image].present?
       @recipe.image.attach(params[:recipe][:image])
+    elsif params[:recipe].key?(:image_url) && params[:recipe][:image_url].blank?
+      @recipe.image.purge_later if @recipe.image.attached?
     end
     if @recipe.update(recipe_params)
       render json: RecipeSerializer.new(@recipe).serializable_hash
