@@ -19,6 +19,7 @@ class Api::V1::RecipesController < Api::V1::BaseController
 
   def create
     recipe = current_user.recipes.build(recipe_params)
+    recipe.image.attach(params[:recipe][:image]) if params[:recipe][:image].present?
     if recipe.save
       render json: RecipeSerializer.new(recipe).serializable_hash, status: :created
     else
@@ -27,6 +28,11 @@ class Api::V1::RecipesController < Api::V1::BaseController
   end
 
   def update
+    if params[:recipe][:image].present?
+      @recipe.image.attach(params[:recipe][:image])
+    elsif params[:recipe].key?(:image_url) && params[:recipe][:image_url].blank?
+      @recipe.image.purge_later if @recipe.image.attached?
+    end
     if @recipe.update(recipe_params)
       render json: RecipeSerializer.new(@recipe).serializable_hash
     else
@@ -59,6 +65,6 @@ class Api::V1::RecipesController < Api::V1::BaseController
   end
 
   def recipe_params
-    params.require(:recipe).permit(:name, ingredients: [ :name, :quantity, :unit ], instructions: [])
+    params.require(:recipe).permit(:name, :image_url, ingredients: [ :name, :quantity, :unit ], instructions: [])
   end
 end

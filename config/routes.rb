@@ -29,6 +29,9 @@ Rails.application.routes.draw do
       post "ai/suggest_recipes", to: "ai#suggest_recipes"
       post "ai/generate_grocery_list", to: "ai#generate_grocery_list"
 
+      # Recipe discovery
+      post "discover", to: "discover#index"
+
       # User settings
       get "settings", to: "settings#show"
       put "settings", to: "settings#update"

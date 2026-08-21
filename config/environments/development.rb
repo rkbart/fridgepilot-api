@@ -6,6 +6,12 @@ Rails.application.configure do
   # Make code changes take effect immediately without server restart.
   config.enable_reloading = true
 
+  # Store files locally.
+  config.active_storage.service = :local
+
+  # Default URL options for Active Storage blob URLs.
+  Rails.application.routes.default_url_options[:host] = "localhost:3001"
+
   # Do not eager load code on boot.
   config.eager_load = false
 
