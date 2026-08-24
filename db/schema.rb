@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_21_050100) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_24_055423) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -78,6 +78,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_21_050100) do
     t.string "unit"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index "user_id, lower(TRIM(BOTH FROM regexp_replace((name)::text, '\\s+'::text, ' '::text, 'g'::text)))", name: "index_pantry_items_on_user_normalized_name", unique: true
     t.index ["user_id"], name: "index_pantry_items_on_user_id"
   end
 
