@@ -93,6 +93,8 @@ Sessions **slide**: before a token expires, the client can call `POST /users/tok
 | `PATCH` | `/api/v1/pantry_items/:id` | Update item |
 | `DELETE` | `/api/v1/pantry_items/:id` | Delete item |
 
+Pantry item names are normalized (trimmed, whitespace collapsed) and must be unique per user case-insensitively — creating "Spaghetti" when "spaghetti" exists returns `422` with a validation error. Existing duplicates are merged by the `DedupePantryItemsAndAddUniqueIndex` migration (keeps the oldest item), backed by a functional unique index on `LOWER(TRIM(REGEXP_REPLACE(name, '\s+', ' ', 'g')))` per user.
+
 ### Recipes
 
 | Method | Path | Description |
