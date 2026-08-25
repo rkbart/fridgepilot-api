@@ -12,9 +12,10 @@ class Api::V1::DiscoverController < Api::V1::BaseController
     client = TheMealDbClient.new
     recipe_ids = search_recipes(client, ingredients)
 
-    full_recipes = fetch_full_recipes(client, recipe_ids, ingredients)
+    full_recipes = fetch_full_recipes(client, recipe_ids)
 
-    matcher = RecipeMatcher.new(ingredients)
+    pantry_names = current_user.pantry_items.pluck(:name)
+    matcher = RecipeMatcher.new(pantry_names)
     ranked = full_recipes
       .map { |recipe| matcher.match(recipe) }
       .sort_by { |r| [ -r[:match_pct], -r[:available_count] ] }
@@ -47,8 +48,9 @@ class Api::V1::DiscoverController < Api::V1::BaseController
       .map(&:first)
   end
 
-  def fetch_full_recipes(client, recipe_ids, ingredients)
-    matcher = RecipeMatcher.new(ingredients)
+  def fetch_full_recipes(client, recipe_ids)
+    pantry_names = current_user.pantry_items.pluck(:name)
+    matcher = RecipeMatcher.new(pantry_names)
     recipes = []
 
     recipe_ids.each do |id|
