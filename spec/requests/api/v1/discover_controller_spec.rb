@@ -28,6 +28,8 @@ RSpec.describe Api::V1::DiscoverController, type: :request do
 
     context 'with valid ingredients' do
       it 'returns recipes with match scores' do
+        create(:pantry_item, user: user, name: 'chicken')
+
         client_mock = instance_double(TheMealDbClient)
 
         allow(TheMealDbClient).to receive(:new).and_return(client_mock)
