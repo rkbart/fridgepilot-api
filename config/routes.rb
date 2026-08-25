@@ -15,7 +15,11 @@ Rails.application.routes.draw do
       # Current user
       get "me", to: "me#show"
       # Recipe endpoints
-      resources :recipes, only: [ :index, :show, :create, :update, :destroy ]
+      resources :recipes, only: [ :index, :show, :create, :update, :destroy ] do
+        collection do
+          post :import
+        end
+      end
 
       # Pantry endpoints
       resources :pantry_items, only: [ :index, :show, :create, :update, :destroy ]
