@@ -4,6 +4,7 @@ class Recipe < ApplicationRecord
   has_one_attached :image
 
   validates :name, presence: true
+  validates :source, uniqueness: { scope: :user_id, message: "already saved to your recipes" }, if: -> { source.present? }
   validate :ingredients_must_be_valid
   validate :instructions_must_be_valid
 
