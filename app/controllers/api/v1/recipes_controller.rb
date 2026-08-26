@@ -109,13 +109,21 @@ class Api::V1::RecipesController < Api::V1::BaseController
     { name: ing[:name], quantity: quantity, unit: unit }
   end
 
+  VALID_UNITS = %w[oz lb g kg ml l cup tbsp tsp pcs can pack bag dozen bunch slice pinch box].freeze
+
+  def normalize_unit(unit)
+    return nil if unit.blank?
+    cleaned = unit.strip.downcase.sub(/s\z/, '')
+    VALID_UNITS.include?(cleaned) ? cleaned : nil
+  end
+
   def parse_measure(measure)
     return [ nil, nil ] if measure.blank?
     trimmed = measure.strip
     # Try to extract leading numeric quantity (supports decimals and fractions like 1/2)
     qty_match = trimmed.match(/^([\d.\/]+)/)
     unless qty_match
-      return [ nil, trimmed ]
+      return [ nil, normalize_unit(trimmed) ]
     end
 
     qty_str = qty_match[1]
@@ -129,7 +137,7 @@ class Api::V1::RecipesController < Api::V1::BaseController
     end
 
     quantity = nil if quantity.zero?
-    unit = rest.empty? ? nil : rest
+    unit = rest.empty? ? nil : normalize_unit(rest)
 
     [ quantity, unit ]
   end
