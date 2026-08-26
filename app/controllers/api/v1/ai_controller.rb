@@ -50,8 +50,11 @@ class Api::V1::AiController < Api::V1::BaseController
       pantry_items: pantry_items
     )
 
+    list_name = "#{recipe.name} - Grocery List"
+    list_name += " (#{Time.current.to_i})" if current_user.grocery_lists.exists?(name: list_name)
+
     list = current_user.grocery_lists.create!(
-      name: "#{recipe.name} - Grocery List",
+      name: list_name,
       source: "ai_generated"
     )
 
