@@ -7,6 +7,7 @@ class RecipeSerializer
     {
       id: @recipe.id,
       name: @recipe.name,
+      source: @recipe.source,
       image_url: image_url,
       ingredients: @recipe.ingredients,
       instructions: @recipe.instructions,
