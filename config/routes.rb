@@ -26,6 +26,10 @@ Rails.application.routes.draw do
 
       # Grocery list endpoints
       resources :grocery_lists, only: [ :index, :show, :create, :update, :destroy ] do
+        member do
+          patch :archive
+          patch :unarchive
+        end
         resources :items, only: [ :create, :update, :destroy ], controller: "grocery_items"
       end
 

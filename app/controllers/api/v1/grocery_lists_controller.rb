@@ -1,5 +1,5 @@
 class Api::V1::GroceryListsController < Api::V1::BaseController
-  before_action :set_grocery_list, only: [ :show, :update, :destroy ]
+  before_action :set_grocery_list, only: [ :show, :update, :destroy, :archive, :unarchive ]
 
   def index
     lists = current_user.grocery_lists.includes(:grocery_items)
@@ -30,6 +30,16 @@ class Api::V1::GroceryListsController < Api::V1::BaseController
   def destroy
     @grocery_list.destroy
     head :no_content
+  end
+
+  def archive
+    @grocery_list.update!(status: "archived")
+    render json: GroceryListSerializer.new(@grocery_list).serializable_hash
+  end
+
+  def unarchive
+    @grocery_list.update!(status: "active")
+    render json: GroceryListSerializer.new(@grocery_list).serializable_hash
   end
 
   private
