@@ -6,7 +6,7 @@ class Api::V1::RecipesController < Api::V1::BaseController
     scope = apply_search(scope) if params[:q].present?
     page = [ params[:page].to_i, 1 ].max
     per_page = (params[:per_page] || 20).to_i.clamp(1, 100)
-    recipes = scope.order(created_at: :desc).offset((page - 1) * per_page).limit(per_page)
+    recipes = scope.with_attached_image.order(created_at: :desc).offset((page - 1) * per_page).limit(per_page)
     render json: {
       data: recipes.map { |r| RecipeSerializer.new(r).serializable_hash },
       meta: { total: scope.count, page: page, per_page: per_page }
