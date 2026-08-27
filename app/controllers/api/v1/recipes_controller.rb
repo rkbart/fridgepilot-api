@@ -113,7 +113,7 @@ class Api::V1::RecipesController < Api::V1::BaseController
 
   def normalize_unit(unit)
     return nil if unit.blank?
-    cleaned = unit.strip.downcase.sub(/s\z/, '')
+    cleaned = unit.strip.downcase.sub(/s\z/, "")
     VALID_UNITS.include?(cleaned) ? cleaned : nil
   end
 

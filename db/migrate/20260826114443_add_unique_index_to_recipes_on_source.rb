@@ -12,7 +12,7 @@ class AddUniqueIndexToRecipesOnSource < ActiveRecord::Migration[8.1]
       AND source IS NOT NULL
     SQL
 
-    add_index :recipes, [:user_id, :source], unique: true, name: "index_recipes_on_user_id_and_source_unique", where: "source IS NOT NULL"
+    add_index :recipes, [ :user_id, :source ], unique: true, name: "index_recipes_on_user_id_and_source_unique", where: "source IS NOT NULL"
   end
 
   def down
