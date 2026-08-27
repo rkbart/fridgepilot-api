@@ -8,6 +8,7 @@ class GroceryListSerializer
       id: @list.id,
       name: @list.name,
       source: @list.source,
+      status: @list.status,
       items: @list.grocery_items.map { |i| GroceryItemSerializer.new(i).serializable_hash },
       created_at: @list.created_at,
       updated_at: @list.updated_at
